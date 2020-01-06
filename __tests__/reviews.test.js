@@ -102,6 +102,20 @@ describe('review routes', () => {
           });
       });
   });
+  it('updates an review by id', () => {
+    return agent
+      .patch(`/api/v1/reviews/${review.id}`)
+      .send({ firstName: 'Megatest' })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: review.id,
+          movieTitle:'Cloudy with a chance of meatballs',
+          rating: 3,
+          comment:'Needed more meatballs',
+          __v: 0
+        });
+      });
+  });
 
   it('deletes an review by id', () => {
     return agent

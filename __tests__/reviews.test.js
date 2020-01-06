@@ -68,7 +68,11 @@ describe('review routes', () => {
       })
       .then(res => {
         expect(res.body).toEqual({
-          
+          _id: expect.any(String),
+          movieTitle:'Cloudy with a chance of meatballs',
+          rating: 3,
+          comment: 'Needed more meatballs',
+          __v:0
         });
       });
   });
@@ -83,48 +87,28 @@ describe('review routes', () => {
 
   it('finds all entries', async() => {
     return agent
-      .post('/api/v1/reviews')
-      .send({
-        movieTitle:'Cloudy with a chance of meatballs',
-        rating: 3,
-        comment:'Needed more meatballs'
-      })
+      .get('/api/v1/reviews')
       .then(() => {
         return agent
           .get('/api/v1/reviews')
           .then(res => {
             expect(res.body).toEqual([{
-              _id: expect.any(String),
+              _id: review.id.toString(),
               movieTitle:'Cloudy with a chance of meatballs',
               rating: 3,
               comment:'Needed more meatballs',
-              userId: expect.any(String),
               __v: 0
             }]);
           });
       });
   });
 
-  it('finds an review by id', () => {
-    return request(app)
-      .get(`/api/v1/reviews/${review.id}`)
-      .then(res => {
-        expect(res.body).toEqual({
-          _id: review.id,
-          movieTitle:'Cloudy with a chance of meatballs',
-          rating: 3,
-          comment:'Needed more meatballs',
-          __v: 0
-        });
-      });
-  });
-
   it('deletes an review by id', () => {
-    return request(app)
+    return agent
       .delete(`/api/v1/reviews/${review.id}`)
       .then(res => {
         expect(res.body).toEqual({
-          _id: review.id,
+          _id: review.id.toString(),
           movieTitle:'Cloudy with a chance of meatballs',
           rating: 3,
           comment:'Needed more meatballs',
